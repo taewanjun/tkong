@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시간의 기록 — 역사적 순간들을 기록하는 디지털 아카이브</title>
+  <meta name="description" content="빛바랜 사진과 기록으로 되살아나는 역사의 순간들. 100년의 시간을 담은 디지털 저널 아카이브." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  NOISE OVERLAY                              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  VERTICAL TIMELINE NAV                      -->
+  <!-- ═══════════════════════════════════════════ -->
+  <nav class="timeline-nav" id="timelineNav" aria-label="연도별 타임라인">
+    <div class="timeline-nav__line"></div>
+    <ul class="timeline-nav__list">
+      <li class="timeline-nav__item active" data-year="1910">
+        <a href="#era-1910" class="timeline-nav__link">
+          <span class="timeline-nav__dot"></span>
+          <span class="timeline-nav__label">1910</span>
+        </a>
+      </li>
+      <li class="timeline-nav__item" data-year="1930">
+        <a href="#era-1930" class="timeline-nav__link">
+          <span class="timeline-nav__dot"></span>
+          <span class="timeline-nav__label">1930</span>
+        </a>
+      </li>
+      <li class="timeline-nav__item" data-year="1945">
+        <a href="#era-1945" class="timeline-nav__link">
+          <span class="timeline-nav__dot"></span>
+          <span class="timeline-nav__label">1945</span>
+        </a>
+      </li>
+      <li class="timeline-nav__item" data-year="1960">
+        <a href="#era-1960" class="timeline-nav__link">
+          <span class="timeline-nav__dot"></span>
+          <span class="timeline-nav__label">1960</span>
+        </a>
+      </li>
+      <li class="timeline-nav__item" data-year="1970">
+        <a href="#era-1970" class="timeline-nav__link">
+          <span class="timeline-nav__dot"></span>
+          <span class="timeline-nav__label">1970</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  MASTHEAD                                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <header class="masthead" role="banner">
+    <div class="masthead__meta">
+      <span class="masthead__issue">Vol. CXII &bull; No. 38</span>
+      <span class="masthead__divider">|</span>
+      <span class="masthead__date">昭和 20年 &mdash; 1945. 08. 15</span>
+      <span class="masthead__divider">|</span>
+      <span class="masthead__price">REF. ARCH-0001</span>
+    </div>
+    <div class="masthead__title-wrap">
+      <div class="masthead__rule-top"></div>
+      <h1 class="masthead__title">시간의 기록을 들추다</h1>
+      <p class="masthead__subtitle">HISTORICAL MOMENTS — DIGITAL ARCHIVE</p>
+      <div class="masthead__rule-bottom"></div>
+    </div>
+    <div class="masthead__tagline">역사적 순간들을 기록하는 디지털 저널</div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  HERO SECTION                               -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="hero" id="hero" aria-label="메인 대표 사진">
+    <div class="hero__frame-outer">
+      <div class="hero__frame-inner">
+        <div class="hero__photo-wrap">
+          <img
+            src="archive_photo_city.png"
+            alt="1940년대 도시 거리 풍경 — 역사 아카이브"
+            class="hero__photo"
+            id="heroPhoto"
+          />
+          <div class="hero__photo-vignette" aria-hidden="true"></div>
+          <div class="hero__stamp hero__stamp--archived" aria-label="보관됨 스탬프">ARCHIVED</div>
+        </div>
+        <div class="hero__caption">
+          <span class="hero__ref">REF. 19450815 &bull; SEOUL, KOREA</span>
+          <p class="hero__caption-text">격동의 시대, 카메라 렌즈에 담긴 평범한 사람들의 이야기.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero__intro-text">
+      <p>오래된 서랍 속 빛바랜 사진 한 장. 누군가의 삶이, 어떤 시대의 숨결이 그 안에 고요히 잠들어 있습니다.</p>
+      <p>이 아카이브는 그 침묵하는 순간들에 다시 목소리를 돌려주고자 합니다.</p>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span class="scroll-hint__text">스크롤하여 기록을 펼치다</span>
+      <span class="scroll-hint__arrow">&#8595;</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  DIVIDER                                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <div class="section-divider__rule"></div>
+    <span class="section-divider__ornament">✦ 기록 보관소 ✦</span>
+    <div class="section-divider__rule"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  NEWSPAPER CONTENT — ERA 1910              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="archive-era" id="era-1910" data-era="1910">
+    <div class="era-header">
+      <span class="era-header__decade">1910s</span>
+      <h2 class="era-header__title">근대의 여명 — 새로운 세기의 시작</h2>
+      <p class="era-header__desc">The Dawn of Modernity</p>
+    </div>
+
+    <div class="newspaper-grid newspaper-grid--1910">
+
+      <!-- Large article -->
+      <article class="news-article news-article--large" data-ref="REF. 19120303">
+        <div class="news-article__photo-wrap">
+          <img
+            src="archive_photo_portrait.png"
+            alt="1910년대 단체 초상 사진"
+            class="news-article__photo"
+            loading="lazy"
+          />
+          <div class="stamp stamp--confidential" aria-label="기밀 스탬프">CONFIDENTIAL</div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">근대화의 물결 속에서, 우리는 무엇을 잃었는가</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19120303</span> &bull; 1912년 3월 3일</p>
+          <p class="news-article__text drop-cap">사진 속 인물들의 눈빛에는 시대의 무게가 고스란히 담겨있다. 낯선 서양식 건물을 배경으로 단정히 차려입은 이들은 격변의 시대를 묵묵히 살아낸 보통 사람들이다. 그들의 이름은 역사책에 남지 않았지만, 이 한 장의 사진이 그들의 존재를 증언한다.</p>
+          <p class="news-article__text">새로운 문물이 밀려들던 그 시절, 사진이라는 기술 자체가 경이의 대상이었다. 셔터가 눌리는 순간, 시간은 멈추고 기억은 은판 위에 새겨졌다.</p>
+        </div>
+      </article>
+
+      <!-- Small article 1 -->
+      <article class="news-article news-article--small" data-ref="REF. 19150620">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #c8b99a;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1915</span>
+            <span class="photo-placeholder__label">PHOTO UNAVAILABLE</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">시장 골목의 아침 — 삶의 냄새</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19150620</span> &bull; 1915년 6월 20일</p>
+          <p class="news-article__text drop-cap">새벽 네 시, 상인들이 하나둘 자리를 펼치기 시작하면 골목에는 삶의 소리가 차오른다. 찐빵 찌는 냄새, 생선 비린내, 그리고 부지런한 발소리들.</p>
+        </div>
+      </article>
+
+      <!-- Small article 2 -->
+      <article class="news-article news-article--small" data-ref="REF. 19180901">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #b8a88a;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1918</span>
+            <span class="photo-placeholder__label">PHOTO UNAVAILABLE</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">전선에서 온 편지 — 그리움의 기록</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19180901</span> &bull; 1918년 9월 1일</p>
+          <p class="news-article__text drop-cap">손때 묻은 편지지에 꾹꾹 눌러쓴 글자들. 전쟁터에서도 가족을 그리는 마음은 변하지 않았다. 붓 끝에 실린 멀고 먼 그리움.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  DIVIDER                                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <div class="section-divider__rule"></div>
+    <span class="section-divider__ornament">— 1930 —</span>
+    <div class="section-divider__rule"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ERA 1930                                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="archive-era" id="era-1930" data-era="1930">
+    <div class="era-header">
+      <span class="era-header__decade">1930s</span>
+      <h2 class="era-header__title">대공황의 그늘 — 그러나 삶은 계속되었다</h2>
+      <p class="era-header__desc">Life Goes On</p>
+    </div>
+
+    <div class="newspaper-grid newspaper-grid--1930">
+
+      <!-- Wide article -->
+      <article class="news-article news-article--wide" data-ref="REF. 19350715">
+        <div class="news-article__photo-wrap">
+          <img
+            src="archive_photo_harbor.png"
+            alt="1930~50년대 항구 풍경"
+            class="news-article__photo"
+            loading="lazy"
+          />
+          <div class="stamp stamp--archived" aria-label="보관됨 스탬프">ARCHIVED</div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">항구에서 — 바다를 건너는 희망과 이별</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19350715</span> &bull; 1935년 7월 15일 &bull; 부산항</p>
+          <div class="news-article__columns">
+            <p class="news-article__text drop-cap">부두에 선 사람들의 손이 흔들린다. 어떤 이는 새로운 삶을 향해 배에 오르고, 어떤 이는 돌아오는 사람을 맞으러 나왔다. 항구는 언제나 만남과 이별이 교차하는 곳.</p>
+            <p class="news-article__text">바닷바람이 땡볕 속에서 옷깃을 파고든다. 돛대에 묶인 밧줄처럼 단단한 무언가가 이 사람들을 이 자리로 데려왔을 것이다. 가족, 생계, 혹은 희망.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Column articles -->
+      <article class="news-article news-article--column" data-ref="REF. 19320410">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #a89878;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1932</span>
+            <span class="photo-placeholder__label">PHOTO NO. 0032</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">작은 책방의 주인</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19320410</span></p>
+          <p class="news-article__text drop-cap">불황 속에서도 책은 팔렸다. 종이 냄새가 가득한 좁은 책방, 주인은 매일 새벽 문을 열었다. 알고 싶다는 욕망은 가난도 막을 수 없었다.</p>
+        </div>
+      </article>
+
+      <article class="news-article news-article--column" data-ref="REF. 19381120">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #bfae95;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1938</span>
+            <span class="photo-placeholder__label">PHOTO NO. 0041</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">아이들의 골목 놀이</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19381120</span></p>
+          <p class="news-article__text drop-cap">전쟁의 기운이 감돌던 그 시절에도 아이들은 뛰어놀았다. 돌과 흙으로 만든 놀이터. 웃음소리만은 그 어떤 시대도 빼앗아 갈 수 없었다.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  DIVIDER                                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <div class="section-divider__rule"></div>
+    <span class="section-divider__ornament">— 1945 —</span>
+    <div class="section-divider__rule"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ERA 1945                                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="archive-era" id="era-1945" data-era="1945">
+    <div class="era-header">
+      <span class="era-header__decade">1945s</span>
+      <h2 class="era-header__title">광복의 새벽 — 해방된 땅의 첫 아침</h2>
+      <p class="era-header__desc">The First Dawn of Liberation</p>
+    </div>
+
+    <div class="newspaper-grid newspaper-grid--1945">
+
+      <article class="news-article news-article--feature" data-ref="REF. 19450815">
+        <div class="news-article__badge">특보 SPECIAL REPORT</div>
+        <div class="news-article__photo-wrap">
+          <img
+            src="archive_photo_city.png"
+            alt="1940년대 역사적 도시 거리"
+            class="news-article__photo"
+            loading="lazy"
+          />
+          <div class="stamp stamp--confidential" aria-label="기밀 스탬프">CONFIDENTIAL</div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">1945년 8월 15일 — 거리로 쏟아져 나온 사람들</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19450815</span> &bull; 1945년 8월 15일 정오 &bull; 긴급 보도</p>
+          <div class="news-article__columns news-article__columns--3">
+            <p class="news-article__text drop-cap">정오의 라디오 방송이 끝나자 거리는 순식간에 인파로 가득 찼다. 소리 소문도 없이 번지는 소식, 사람들은 서로를 끌어안고 울었다. 눈물이 광복의 첫 비였다.</p>
+            <p class="news-article__text">수십 년의 기다림이 한꺼번에 터져나왔다. 어떤 이는 만세를 외치고, 어떤 이는 무릎을 꺾고 땅에 엎드렸다. 그것은 기쁨이자 통곡이었다.</p>
+            <p class="news-article__text">사진사의 셔터는 멈추지 않았다. 역사는 그렇게 한 장씩 은판 위에 새겨졌고, 우리는 오늘 그 기록을 통해 그 날의 공기를 느낀다.</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  DIVIDER                                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section-divider" aria-hidden="true">
+    <div class="section-divider__rule"></div>
+    <span class="section-divider__ornament">— 1960 · 1970 —</span>
+    <div class="section-divider__rule"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  ERA 1960–70                                -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="archive-era" id="era-1960" data-era="1960">
+    <div class="era-header">
+      <span class="era-header__decade">1960–70s</span>
+      <h2 class="era-header__title">재건의 시대 — 먼지 속에서 피어난 도시</h2>
+      <p class="era-header__desc">Reconstruction &amp; Growth</p>
+    </div>
+
+    <div class="newspaper-grid newspaper-grid--1960">
+
+      <article class="news-article news-article--medium" data-ref="REF. 19620305" id="era-1970">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #9e8e72;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1962</span>
+            <span class="photo-placeholder__label">PHOTO NO. 0088</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">공장 굴뚝의 연기 — 산업화의 서막</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19620305</span> &bull; 1962년 3월</p>
+          <p class="news-article__text drop-cap">굴뚝에서 피어오르는 연기는 그 시절 희망의 상징이었다. 사람들은 공장을 향해 걸었고, 국가는 성장을 향해 달렸다. 그 뒤에 무엇을 잃어버렸는지는 나중에야 알게 되었다.</p>
+          <p class="news-article__text">기계 돌아가는 소리, 쇳덩이 두드리는 소리. 폐허 위에 세워지는 도시의 첫 맥박이었다.</p>
+        </div>
+      </article>
+
+      <article class="news-article news-article--medium" data-ref="REF. 19681010">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #b3a08a;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1968</span>
+            <span class="photo-placeholder__label">PHOTO NO. 0104</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">어느 선생님의 교실</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19681010</span> &bull; 1968년 10월</p>
+          <p class="news-article__text drop-cap">판잣집 교실, 나무 의자, 분필 가루가 날리던 칠판. 그러나 아이들의 눈빛은 누구보다 빛났다. 배움에 대한 열망은 가난도, 전쟁도 꺾을 수 없었다.</p>
+          <p class="news-article__text">그 선생님은 오십 년 뒤, 자신의 제자 중 누군가가 이 나라를 이끌게 되리라는 것을 알았을까.</p>
+        </div>
+      </article>
+
+      <article class="news-article news-article--medium" data-ref="REF. 19730820">
+        <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background: #c4b298;">
+          <div class="photo-placeholder">
+            <span class="photo-placeholder__year">1973</span>
+            <span class="photo-placeholder__label">PHOTO NO. 0131</span>
+          </div>
+        </div>
+        <div class="news-article__body">
+          <h3 class="news-article__headline">한강 다리 위의 사람들</h3>
+          <p class="news-article__meta"><span class="news-article__ref">REF. 19730820</span> &bull; 1973년 8월</p>
+          <p class="news-article__text drop-cap">새로 놓인 다리 위를 수백 명이 걷고 있다. 이 다리가 연결하는 것은 단순히 강의 양안만이 아니다. 과거와 미래, 농촌과 도시, 전통과 근대가 여기서 만났다.</p>
+          <p class="news-article__text">강물은 예나 지금이나 같은 방향으로 흐르지만, 다리 위의 풍경은 해마다 달라졌다.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!--  FOOTER                                     -->
+  <!-- ═══════════════════════════════════════════ -->
+  <footer class="archive-footer">
+    <div class="archive-footer__rule"></div>
+    <div class="archive-footer__content">
+      <p class="archive-footer__title">역사적 순간들을 기록하는 디지털 아카이브</p>
+      <p class="archive-footer__copy">모든 기록은 역사의 증언입니다. &copy; HISTORICAL ARCHIVE — ALL RECORDS PRESERVED</p>
+      <p class="archive-footer__ref">DIGITAL EDITION &bull; VOL. CXII &bull; CLASSIFIED REFERENCE MATERIALS</p>
+    </div>
+    <div class="archive-footer__stamp">ARCHIVE</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

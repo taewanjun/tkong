@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시간의 기록 — 역사적 순간들을 기록하는 디지털 아카이브</title>
+  <meta name="description" content="빛바랜 사진과 기록으로 되살아나는 역사의 순간들. 100년의 시간을 담은 디지털 저널 아카이브." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VINTAGE JOURNAL HISTORY ARCHIVE
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --bg-parchment:   #F4EBE1;
+  --bg-newspaper:   #EFE9D9;
+  --bg-aged:        #E8DDD0;
+  --ink-dark:       #2C2A29;
+  --ink-sepia:      #4A3F35;
+  --ink-faded:      #7A6B5D;
+  --ink-light:      #A89880;
+  --accent-red:     #8B261E;
+  --border-aged:    #C5B89A;
+  --shadow-color:   rgba(44, 42, 41, 0.18);
+  --paper-line:     rgba(44, 42, 41, 0.12);
+  --ff-serif:       'Playfair Display', Georgia, serif;
+  --ff-baskerville: 'Libre Baskerville', Georgia, serif;
+  --ff-typewriter:  'Special Elite', 'Courier New', monospace;
+  --ff-fell:        'IM Fell English', Georgia, serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background-color: var(--bg-parchment);
+  color: var(--ink-dark);
+  font-family: var(--ff-baskerville);
+  line-height: 1.75;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Paper lines */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom, transparent 0px, transparent 27px,
+    var(--paper-line) 27px, var(--paper-line) 28px
+  );
+  opacity: 0.28;
+}
+
+/* Noise texture */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: multiply;
+}
+
+/* ─── Timeline Nav ─── */
+.timeline-nav {
+  position: fixed;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+.timeline-nav__line {
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border-aged) 10%, var(--border-aged) 90%, transparent);
+}
+.timeline-nav__list { list-style: none; display: flex; flex-direction: column; gap: 2.2rem; position: relative; }
+.timeline-nav__link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--ink-faded); }
+.timeline-nav__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid var(--border-aged);
+  background: var(--bg-parchment);
+  transition: 0.3s ease;
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+.timeline-nav__label {
+  font-family: var(--ff-typewriter);
+  font-size: 0.65rem; letter-spacing: 0.05em;
+  opacity: 0; transform: translateX(-4px);
+  transition: 0.3s ease; white-space: nowrap;
+}
+.timeline-nav__link:hover .timeline-nav__label,
+.timeline-nav__item.active .timeline-nav__label { opacity: 1; transform: translateX(0); color: var(--accent-red); }
+.timeline-nav__item.active .timeline-nav__dot { background: var(--accent-red); border-color: var(--accent-red); box-shadow: 0 0 0 3px rgba(139,38,30,0.2); }
+
+/* ─── Masthead ─── */
+.masthead {
+  text-align: center;
+  padding: 2.5rem 5rem 1.5rem;
+  position: relative;
+  z-index: 10;
+  border-bottom: 2px solid var(--ink-dark);
+}
+.masthead__meta { font-family: var(--ff-typewriter); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--ink-faded); margin-bottom: 1rem; }
+.masthead__divider { margin: 0 0.7rem; opacity: 0.5; }
+.masthead__rule-top, .masthead__rule-bottom { height: 1px; background: var(--ink-dark); margin: 0.6rem 0; }
+.masthead__rule-top { margin-bottom: 1rem; }
+.masthead__rule-bottom { margin-top: 0.8rem; }
+.masthead__title { font-family: var(--ff-serif); font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 900; line-height: 1.1; color: var(--ink-dark); letter-spacing: -0.01em; }
+.masthead__subtitle { font-family: var(--ff-typewriter); font-size: 0.7rem; letter-spacing: 0.22em; color: var(--ink-faded); margin-top: 0.4rem; }
+.masthead__tagline { font-family: var(--ff-fell); font-style: italic; font-size: 0.85rem; color: var(--ink-faded); margin-top: 0.5rem; }
+
+/* ─── Hero ─── */
+.hero { max-width: 780px; margin: 4rem auto 3rem; padding: 0 2rem; text-align: center; position: relative; z-index: 10; }
+.hero__frame-outer {
+  display: inline-block; padding: 1rem;
+  background: var(--bg-aged);
+  border: 1px solid var(--border-aged);
+  box-shadow: 0 2px 6px var(--shadow-color), 0 8px 24px var(--shadow-color),
+    inset 0 0 0 3px var(--bg-parchment), inset 0 0 0 4px var(--border-aged);
+  transform: rotate(-0.4deg);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  opacity: 0;
+  animation: heroFadeIn 1.4s 0.3s forwards ease-out;
+}
+.hero__frame-outer:hover {
+  transform: rotate(0deg) scale(1.012);
+  box-shadow: 0 4px 12px var(--shadow-color), 0 16px 40px var(--shadow-color),
+    inset 0 0 0 3px var(--bg-parchment), inset 0 0 0 4px var(--border-aged);
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: rotate(-0.4deg) translateY(20px); }
+  to   { opacity: 1; transform: rotate(-0.4deg) translateY(0); }
+}
+.hero__frame-inner { position: relative; }
+.hero__photo-wrap { position: relative; overflow: hidden; }
+.hero__photo {
+  display: block; width: 100%; max-width: 640px; height: 400px;
+  object-fit: cover;
+  filter: sepia(0.7) contrast(0.9) brightness(0.92);
+  transition: filter 0.6s ease;
+}
+.hero__frame-outer:hover .hero__photo { filter: sepia(0.2) contrast(1.0) brightness(1.0); }
+.hero__photo-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(44,42,41,0.45) 100%);
+  pointer-events: none;
+}
+.hero__caption { padding: 0.6rem 0 0.2rem; text-align: left; }
+.hero__ref { font-family: var(--ff-typewriter); font-size: 0.62rem; letter-spacing: 0.15em; color: var(--ink-faded); }
+.hero__caption-text { font-family: var(--ff-fell); font-style: italic; font-size: 0.85rem; color: var(--ink-sepia); margin-top: 0.2rem; }
+.hero__intro-text { margin: 2.5rem auto 0; max-width: 560px; font-family: var(--ff-fell); font-style: italic; font-size: 1.05rem; color: var(--ink-sepia); line-height: 1.85; text-align: center; }
+.hero__intro-text p + p { margin-top: 0.8rem; }
+.scroll-hint { margin-top: 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; animation: bounceHint 2.2s 2s ease-in-out infinite; }
+.scroll-hint__text { font-family: var(--ff-typewriter); font-size: 0.6rem; letter-spacing: 0.18em; color: var(--ink-light); }
+.scroll-hint__arrow { font-size: 1.1rem; color: var(--ink-light); }
+@keyframes bounceHint { 0%,100%{transform:translateY(0);opacity:0.6;} 50%{transform:translateY(6px);opacity:1;} }
+
+/* ─── Stamp ─── */
+.stamp, .hero__stamp {
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 2.5px solid var(--accent-red);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-typewriter); font-size: 0.42rem; font-weight: bold;
+  letter-spacing: 0.08em; color: var(--accent-red);
+  text-align: center; text-transform: uppercase;
+  transform: rotate(15deg); opacity: 0; pointer-events: none;
+  background: radial-gradient(circle, transparent 40%, rgba(139,38,30,0.05) 100%);
+  box-shadow: inset 0 0 0 1.5px rgba(139,38,30,0.25);
+  transition: opacity 0.4s ease; padding: 0.4rem; line-height: 1.3;
+}
+.news-article.visible .stamp { opacity: 0.8; animation: stampAppear 0.4s 0.5s forwards; }
+.hero__frame-outer .hero__stamp { animation: stampAppear 0.4s 1.2s forwards; }
+@keyframes stampAppear { from{opacity:0;transform:rotate(15deg) scale(1.4);} to{opacity:0.8;transform:rotate(15deg) scale(1);} }
+.stamp--archived { border-color: var(--ink-sepia); color: var(--ink-sepia); }
+.hero__stamp--archived { border-color: var(--ink-sepia); color: var(--ink-sepia); }
+
+/* ─── Section Divider ─── */
+.section-divider {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 2rem 5rem; position: relative; z-index: 10;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.section-divider.visible { opacity: 1; transform: translateY(0); }
+.section-divider__rule { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--border-aged), transparent); }
+.section-divider__ornament { font-family: var(--ff-typewriter); font-size: 0.65rem; letter-spacing: 0.2em; color: var(--ink-faded); white-space: nowrap; }
+
+/* ─── Archive Era ─── */
+.archive-era {
+  max-width: 1100px; margin: 0 auto 4rem; padding: 0 5rem 0 5.5rem;
+  position: relative; z-index: 10;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.archive-era.visible { opacity: 1; transform: translateY(0); }
+.era-header { margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--ink-dark); }
+.era-header__decade { font-family: var(--ff-typewriter); font-size: 0.65rem; letter-spacing: 0.25em; color: var(--accent-red); }
+.era-header__title { font-family: var(--ff-serif); font-size: clamp(1.4rem,3vw,2rem); font-weight: 700; line-height: 1.2; margin: 0.3rem 0 0.2rem; color: var(--ink-dark); }
+.era-header__desc { font-family: var(--ff-typewriter); font-size: 0.7rem; letter-spacing: 0.15em; color: var(--ink-faded); }
+
+/* ─── Newspaper Grids ─── */
+.newspaper-grid--1910 { display: grid; grid-template-columns: 3fr 2fr; grid-template-rows: auto auto; gap: 2rem 2.5rem; }
+.newspaper-grid--1910 .news-article--large { grid-column:1; grid-row:1/3; }
+.newspaper-grid--1910 .news-article--small:nth-child(2) { grid-column:2; grid-row:1; }
+.newspaper-grid--1910 .news-article--small:nth-child(3) { grid-column:2; grid-row:2; }
+.newspaper-grid--1930 { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: auto auto; gap: 2rem 2.5rem; }
+.newspaper-grid--1930 .news-article--wide { grid-column:1/2; grid-row:1/3; }
+.newspaper-grid--1930 .news-article--column:nth-child(2) { grid-column:2; grid-row:1/3; }
+.newspaper-grid--1930 .news-article--column:nth-child(3) { grid-column:3; grid-row:1/3; }
+.newspaper-grid--1945 { display: grid; grid-template-columns: 1fr; }
+.newspaper-grid--1960 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem 2.5rem; }
+
+/* ─── News Article Card ─── */
+.news-article {
+  position: relative;
+  background: var(--bg-newspaper);
+  border: 1px solid var(--border-aged);
+  box-shadow: 2px 3px 10px var(--shadow-color), 5px 6px 20px rgba(44,42,41,0.08);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  opacity: 0; transform: rotate(-0.3deg) translateY(30px);
+}
+.news-article:nth-child(even) { transform: rotate(0.25deg) translateY(30px); }
+.news-article.visible { opacity: 1; transform: rotate(-0.3deg) translateY(0); transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+.news-article:nth-child(even).visible { transform: rotate(0.25deg) translateY(0); }
+.news-article:hover { transform: rotate(0deg) translateY(-4px) !important; box-shadow: 4px 8px 20px var(--shadow-color), 8px 16px 40px rgba(44,42,41,0.12); z-index: 5; }
+
+.news-article__photo-wrap { position: relative; overflow: hidden; }
+.news-article__photo {
+  display: block; width: 100%; height: 240px; object-fit: cover;
+  filter: sepia(0.65) contrast(0.9) brightness(0.9);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}
+.news-article:hover .news-article__photo { filter: sepia(0.12) contrast(1.02) brightness(1.05); transform: scale(1.04); }
+.news-article__photo-wrap--placeholder { height: 180px; display: flex; align-items: center; justify-content: center; }
+.photo-placeholder { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; opacity: 0.55; }
+.photo-placeholder__year { font-family: var(--ff-serif); font-size: 2.5rem; font-weight: 900; color: var(--bg-parchment); line-height: 1; }
+.photo-placeholder__label { font-family: var(--ff-typewriter); font-size: 0.55rem; letter-spacing: 0.2em; color: var(--bg-parchment); }
+
+.news-article__body { padding: 1.2rem 1.4rem 1.5rem; }
+.news-article__badge { background: var(--accent-red); color: #F4EBE1; font-family: var(--ff-typewriter); font-size: 0.6rem; letter-spacing: 0.25em; padding: 0.25rem 0.8rem; display: inline-block; margin: 1rem 1.4rem 0; }
+.news-article__headline { font-family: var(--ff-serif); font-size: clamp(0.95rem,2vw,1.25rem); font-weight: 700; line-height: 1.25; color: var(--ink-dark); margin-bottom: 0.4rem; border-bottom: 1px solid var(--border-aged); padding-bottom: 0.4rem; }
+.news-article__meta { font-family: var(--ff-typewriter); font-size: 0.58rem; letter-spacing: 0.1em; color: var(--ink-faded); margin-bottom: 0.8rem; }
+.news-article__ref { color: var(--accent-red); }
+.news-article__text { font-family: var(--ff-baskerville); font-size: 0.82rem; line-height: 1.8; color: var(--ink-sepia); margin-bottom: 0.6rem; hyphens: auto; word-break: keep-all; }
+.news-article__columns { column-count: 2; column-gap: 1.2rem; column-rule: 1px solid var(--border-aged); }
+.news-article__columns--3 { column-count: 3; }
+
+/* Drop Cap */
+.drop-cap::first-letter { float: left; font-family: var(--ff-serif); font-size: 3.4em; font-weight: 900; line-height: 0.78; margin: 0.08em 0.12em 0 0; color: var(--ink-dark); }
+
+/* Feature */
+.news-article--feature .news-article__photo { height: 360px; }
+.news-article--feature .news-article__headline { font-size: clamp(1.2rem,2.5vw,1.7rem); }
+.news-article--feature .news-article__body { padding: 1.5rem 2rem 2rem; }
+
+/* ─── Footer ─── */
+.archive-footer { position: relative; z-index: 10; text-align: center; padding: 3rem 2rem 4rem; margin-top: 4rem; background: var(--bg-aged); border-top: 2px solid var(--ink-dark); }
+.archive-footer__rule { height: 1px; background: var(--border-aged); margin: 0 auto 2rem; max-width: 400px; }
+.archive-footer__title { font-family: var(--ff-serif); font-size: 1.1rem; font-weight: 700; color: var(--ink-dark); margin-bottom: 0.5rem; }
+.archive-footer__copy { font-family: var(--ff-typewriter); font-size: 0.62rem; letter-spacing: 0.12em; color: var(--ink-faded); }
+.archive-footer__ref { font-family: var(--ff-typewriter); font-size: 0.58rem; letter-spacing: 0.1em; color: var(--ink-light); margin-top: 0.3rem; }
+.archive-footer__stamp { position: absolute; bottom: 1.5rem; right: 3rem; width: 80px; height: 80px; border-radius: 50%; border: 2.5px solid var(--accent-red); display: flex; align-items: center; justify-content: center; font-family: var(--ff-typewriter); font-size: 0.5rem; letter-spacing: 0.15em; color: var(--accent-red); transform: rotate(-12deg); opacity: 0.5; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .timeline-nav { display: none; }
+  .masthead { padding: 2rem 2rem 1.5rem; }
+  .archive-era { padding: 0 1.5rem; }
+  .section-divider { padding: 1.5rem 2rem; }
+  .newspaper-grid--1910, .newspaper-grid--1930, .newspaper-grid--1960 { grid-template-columns: 1fr; }
+  .newspaper-grid--1910 .news-article--large,
+  .newspaper-grid--1910 .news-article--small,
+  .newspaper-grid--1930 .news-article--wide,
+  .newspaper-grid--1930 .news-article--column { grid-column:auto; grid-row:auto; }
+  .news-article__columns, .news-article__columns--3 { column-count: 1; }
+  .hero__photo { height: 260px; }
+  .news-article--feature .news-article__photo { height: 260px; }
+}
+</style>
+</head>
+<body>
+
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<!-- Timeline Nav -->
+<nav class="timeline-nav" id="timelineNav" aria-label="연도별 타임라인">
+  <div class="timeline-nav__line"></div>
+  <ul class="timeline-nav__list">
+    <li class="timeline-nav__item active" data-year="1910"><a href="#era-1910" class="timeline-nav__link"><span class="timeline-nav__dot"></span><span class="timeline-nav__label">1910</span></a></li>
+    <li class="timeline-nav__item" data-year="1930"><a href="#era-1930" class="timeline-nav__link"><span class="timeline-nav__dot"></span><span class="timeline-nav__label">1930</span></a></li>
+    <li class="timeline-nav__item" data-year="1945"><a href="#era-1945" class="timeline-nav__link"><span class="timeline-nav__dot"></span><span class="timeline-nav__label">1945</span></a></li>
+    <li class="timeline-nav__item" data-year="1960"><a href="#era-1960" class="timeline-nav__link"><span class="timeline-nav__dot"></span><span class="timeline-nav__label">1960</span></a></li>
+    <li class="timeline-nav__item" data-year="1970"><a href="#era-1970" class="timeline-nav__link"><span class="timeline-nav__dot"></span><span class="timeline-nav__label">1970</span></a></li>
+  </ul>
+</nav>
+
+<!-- Masthead -->
+<header class="masthead" role="banner">
+  <div class="masthead__meta">
+    <span class="masthead__issue">Vol. CXII &bull; No. 38</span>
+    <span class="masthead__divider">|</span>
+    <span class="masthead__date">昭和 20年 &mdash; 1945. 08. 15</span>
+    <span class="masthead__divider">|</span>
+    <span class="masthead__price">REF. ARCH-0001</span>
+  </div>
+  <div class="masthead__title-wrap">
+    <div class="masthead__rule-top"></div>
+    <h1 class="masthead__title">시간의 기록을 들추다</h1>
+    <p class="masthead__subtitle" id="mastheadSubtitle">HISTORICAL MOMENTS — DIGITAL ARCHIVE</p>
+    <div class="masthead__rule-bottom"></div>
+  </div>
+  <div class="masthead__tagline">역사적 순간들을 기록하는 디지털 저널</div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero__frame-outer">
+    <div class="hero__frame-inner">
+      <div class="hero__photo-wrap">
+        <img src="archive_photo_city.png" alt="1940년대 도시 거리 풍경" class="hero__photo" id="heroPhoto" onerror="this.style.background='#c8b99a';this.style.minHeight='400px';this.removeAttribute('src')"/>
+        <div class="hero__photo-vignette" aria-hidden="true"></div>
+        <div class="hero__stamp hero__stamp--archived">ARCHIVED</div>
+      </div>
+      <div class="hero__caption">
+        <span class="hero__ref">REF. 19450815 &bull; SEOUL, KOREA</span>
+        <p class="hero__caption-text">격동의 시대, 카메라 렌즈에 담긴 평범한 사람들의 이야기.</p>
+      </div>
+    </div>
+  </div>
+  <div class="hero__intro-text">
+    <p>오래된 서랍 속 빛바랜 사진 한 장. 누군가의 삶이, 어떤 시대의 숨결이 그 안에 고요히 잠들어 있습니다.</p>
+    <p>이 아카이브는 그 침묵하는 순간들에 다시 목소리를 돌려주고자 합니다.</p>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">
+    <span class="scroll-hint__text">스크롤하여 기록을 펼치다</span>
+    <span class="scroll-hint__arrow">&#8595;</span>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="section-divider" aria-hidden="true">
+  <div class="section-divider__rule"></div>
+  <span class="section-divider__ornament">✦ 기록 보관소 ✦</span>
+  <div class="section-divider__rule"></div>
+</div>
+
+<!-- ERA 1910 -->
+<section class="archive-era" id="era-1910" data-era="1910">
+  <div class="era-header">
+    <span class="era-header__decade">1910s</span>
+    <h2 class="era-header__title">근대의 여명 — 새로운 세기의 시작</h2>
+    <p class="era-header__desc">The Dawn of Modernity</p>
+  </div>
+  <div class="newspaper-grid newspaper-grid--1910">
+    <article class="news-article news-article--large" data-ref="REF. 19120303">
+      <div class="news-article__photo-wrap">
+        <img src="archive_photo_portrait.png" alt="1910년대 단체 초상 사진" class="news-article__photo" loading="lazy" onerror="this.parentElement.style.background='#b8a88a';this.parentElement.style.minHeight='240px';this.remove()"/>
+        <div class="stamp stamp--confidential">CONFIDENTIAL</div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">근대화의 물결 속에서, 우리는 무엇을 잃었는가</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19120303</span> &bull; 1912년 3월 3일</p>
+        <p class="news-article__text drop-cap">사진 속 인물들의 눈빛에는 시대의 무게가 고스란히 담겨있다. 낯선 서양식 건물을 배경으로 단정히 차려입은 이들은 격변의 시대를 묵묵히 살아낸 보통 사람들이다. 그들의 이름은 역사책에 남지 않았지만, 이 한 장의 사진이 그들의 존재를 증언한다.</p>
+        <p class="news-article__text">새로운 문물이 밀려들던 그 시절, 사진이라는 기술 자체가 경이의 대상이었다. 셔터가 눌리는 순간, 시간은 멈추고 기억은 은판 위에 새겨졌다.</p>
+      </div>
+    </article>
+    <article class="news-article news-article--small" data-ref="REF. 19150620">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#c8b99a;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1915</span><span class="photo-placeholder__label">PHOTO UNAVAILABLE</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">시장 골목의 아침 — 삶의 냄새</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19150620</span> &bull; 1915년 6월 20일</p>
+        <p class="news-article__text drop-cap">새벽 네 시, 상인들이 하나둘 자리를 펼치기 시작하면 골목에는 삶의 소리가 차오른다. 찐빵 찌는 냄새, 생선 비린내, 그리고 부지런한 발소리들.</p>
+      </div>
+    </article>
+    <article class="news-article news-article--small" data-ref="REF. 19180901">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#b8a88a;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1918</span><span class="photo-placeholder__label">PHOTO UNAVAILABLE</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">전선에서 온 편지 — 그리움의 기록</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19180901</span> &bull; 1918년 9월 1일</p>
+        <p class="news-article__text drop-cap">손때 묻은 편지지에 꾹꾹 눌러쓴 글자들. 전쟁터에서도 가족을 그리는 마음은 변하지 않았다. 붓 끝에 실린 멀고 먼 그리움.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true">
+  <div class="section-divider__rule"></div>
+  <span class="section-divider__ornament">— 1930 —</span>
+  <div class="section-divider__rule"></div>
+</div>
+
+<!-- ERA 1930 -->
+<section class="archive-era" id="era-1930" data-era="1930">
+  <div class="era-header">
+    <span class="era-header__decade">1930s</span>
+    <h2 class="era-header__title">대공황의 그늘 — 그러나 삶은 계속되었다</h2>
+    <p class="era-header__desc">Life Goes On</p>
+  </div>
+  <div class="newspaper-grid newspaper-grid--1930">
+    <article class="news-article news-article--wide" data-ref="REF. 19350715">
+      <div class="news-article__photo-wrap">
+        <img src="archive_photo_harbor.png" alt="1930년대 항구 풍경" class="news-article__photo" loading="lazy" onerror="this.parentElement.style.background='#a89878';this.parentElement.style.minHeight='240px';this.remove()"/>
+        <div class="stamp stamp--archived">ARCHIVED</div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">항구에서 — 바다를 건너는 희망과 이별</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19350715</span> &bull; 1935년 7월 15일 &bull; 부산항</p>
+        <div class="news-article__columns">
+          <p class="news-article__text drop-cap">부두에 선 사람들의 손이 흔들린다. 어떤 이는 새로운 삶을 향해 배에 오르고, 어떤 이는 돌아오는 사람을 맞으러 나왔다. 항구는 언제나 만남과 이별이 교차하는 곳.</p>
+          <p class="news-article__text">바닷바람이 땡볕 속에서 옷깃을 파고든다. 돛대에 묶인 밧줄처럼 단단한 무언가가 이 사람들을 이 자리로 데려왔을 것이다. 가족, 생계, 혹은 희망.</p>
+        </div>
+      </div>
+    </article>
+    <article class="news-article news-article--column" data-ref="REF. 19320410">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#a89878;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1932</span><span class="photo-placeholder__label">PHOTO NO. 0032</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">작은 책방의 주인</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19320410</span></p>
+        <p class="news-article__text drop-cap">불황 속에서도 책은 팔렸다. 종이 냄새가 가득한 좁은 책방, 주인은 매일 새벽 문을 열었다. 알고 싶다는 욕망은 가난도 막을 수 없었다.</p>
+      </div>
+    </article>
+    <article class="news-article news-article--column" data-ref="REF. 19381120">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#bfae95;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1938</span><span class="photo-placeholder__label">PHOTO NO. 0041</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">아이들의 골목 놀이</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19381120</span></p>
+        <p class="news-article__text drop-cap">전쟁의 기운이 감돌던 그 시절에도 아이들은 뛰어놀았다. 돌과 흙으로 만든 놀이터. 웃음소리만은 그 어떤 시대도 빼앗아 갈 수 없었다.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true">
+  <div class="section-divider__rule"></div>
+  <span class="section-divider__ornament">— 1945 —</span>
+  <div class="section-divider__rule"></div>
+</div>
+
+<!-- ERA 1945 -->
+<section class="archive-era" id="era-1945" data-era="1945">
+  <div class="era-header">
+    <span class="era-header__decade">1945s</span>
+    <h2 class="era-header__title">광복의 새벽 — 해방된 땅의 첫 아침</h2>
+    <p class="era-header__desc">The First Dawn of Liberation</p>
+  </div>
+  <div class="newspaper-grid newspaper-grid--1945">
+    <article class="news-article news-article--feature" data-ref="REF. 19450815">
+      <div class="news-article__badge">특보 SPECIAL REPORT</div>
+      <div class="news-article__photo-wrap">
+        <img src="archive_photo_city.png" alt="1945년 도시 거리" class="news-article__photo" loading="lazy" onerror="this.parentElement.style.background='#c8b99a';this.parentElement.style.minHeight='360px';this.remove()"/>
+        <div class="stamp stamp--confidential">CONFIDENTIAL</div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">1945년 8월 15일 — 거리로 쏟아져 나온 사람들</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19450815</span> &bull; 1945년 8월 15일 정오 &bull; 긴급 보도</p>
+        <div class="news-article__columns news-article__columns--3">
+          <p class="news-article__text drop-cap">정오의 라디오 방송이 끝나자 거리는 순식간에 인파로 가득 찼다. 소리 소문도 없이 번지는 소식, 사람들은 서로를 끌어안고 울었다. 눈물이 광복의 첫 비였다.</p>
+          <p class="news-article__text">수십 년의 기다림이 한꺼번에 터져나왔다. 어떤 이는 만세를 외치고, 어떤 이는 무릎을 꺾고 땅에 엎드렸다. 그것은 기쁨이자 통곡이었다.</p>
+          <p class="news-article__text">사진사의 셔터는 멈추지 않았다. 역사는 그렇게 한 장씩 은판 위에 새겨졌고, 우리는 오늘 그 기록을 통해 그 날의 공기를 느낀다.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true">
+  <div class="section-divider__rule"></div>
+  <span class="section-divider__ornament">— 1960 · 1970 —</span>
+  <div class="section-divider__rule"></div>
+</div>
+
+<!-- ERA 1960-70 -->
+<section class="archive-era" id="era-1960" data-era="1960">
+  <div class="era-header">
+    <span class="era-header__decade">1960–70s</span>
+    <h2 class="era-header__title">재건의 시대 — 먼지 속에서 피어난 도시</h2>
+    <p class="era-header__desc">Reconstruction &amp; Growth</p>
+  </div>
+  <div class="newspaper-grid newspaper-grid--1960">
+    <article class="news-article news-article--medium" data-ref="REF. 19620305" id="era-1970">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#9e8e72;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1962</span><span class="photo-placeholder__label">PHOTO NO. 0088</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">공장 굴뚝의 연기 — 산업화의 서막</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19620305</span> &bull; 1962년 3월</p>
+        <p class="news-article__text drop-cap">굴뚝에서 피어오르는 연기는 그 시절 희망의 상징이었다. 사람들은 공장을 향해 걸었고, 국가는 성장을 향해 달렸다. 그 뒤에 무엇을 잃어버렸는지는 나중에야 알게 되었다.</p>
+        <p class="news-article__text">기계 돌아가는 소리, 쇳덩이 두드리는 소리. 폐허 위에 세워지는 도시의 첫 맥박이었다.</p>
+      </div>
+    </article>
+    <article class="news-article news-article--medium" data-ref="REF. 19681010">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#b3a08a;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1968</span><span class="photo-placeholder__label">PHOTO NO. 0104</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">어느 선생님의 교실</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19681010</span> &bull; 1968년 10월</p>
+        <p class="news-article__text drop-cap">판잣집 교실, 나무 의자, 분필 가루가 날리던 칠판. 그러나 아이들의 눈빛은 누구보다 빛났다. 배움에 대한 열망은 가난도, 전쟁도 꺾을 수 없었다.</p>
+        <p class="news-article__text">그 선생님은 오십 년 뒤, 자신의 제자 중 누군가가 이 나라를 이끌게 되리라는 것을 알았을까.</p>
+      </div>
+    </article>
+    <article class="news-article news-article--medium" data-ref="REF. 19730820">
+      <div class="news-article__photo-wrap news-article__photo-wrap--placeholder" style="background:#c4b298;">
+        <div class="photo-placeholder"><span class="photo-placeholder__year">1973</span><span class="photo-placeholder__label">PHOTO NO. 0131</span></div>
+      </div>
+      <div class="news-article__body">
+        <h3 class="news-article__headline">한강 다리 위의 사람들</h3>
+        <p class="news-article__meta"><span class="news-article__ref">REF. 19730820</span> &bull; 1973년 8월</p>
+        <p class="news-article__text drop-cap">새로 놓인 다리 위를 수백 명이 걷고 있다. 이 다리가 연결하는 것은 단순히 강의 양안만이 아니다. 과거와 미래, 농촌과 도시, 전통과 근대가 여기서 만났다.</p>
+        <p class="news-article__text">강물은 예나 지금이나 같은 방향으로 흐르지만, 다리 위의 풍경은 해마다 달라졌다.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="archive-footer">
+  <div class="archive-footer__rule"></div>
+  <div class="archive-footer__content">
+    <p class="archive-footer__title">역사적 순간들을 기록하는 디지털 아카이브</p>
+    <p class="archive-footer__copy">모든 기록은 역사의 증언입니다. &copy; HISTORICAL ARCHIVE — ALL RECORDS PRESERVED</p>
+    <p class="archive-footer__ref">DIGITAL EDITION &bull; VOL. CXII &bull; CLASSIFIED REFERENCE MATERIALS</p>
+  </div>
+  <div class="archive-footer__stamp">ARCHIVE</div>
+</footer>
+
+<script>
+'use strict';
+
+// ── Scroll Reveal ──────────────────────────────────────────
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+
+document.querySelectorAll('.archive-era, .section-divider').forEach(el => revealObs.observe(el));
+
+const cardObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const grid = e.target.closest('.newspaper-grid');
+      const cards = grid ? [...grid.querySelectorAll('.news-article')] : [e.target];
+      cards.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 130));
+      cardObs.unobserve(e.target);
+    }
+  });
+}, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+
+document.querySelectorAll('.newspaper-grid').forEach(g => {
+  const first = g.querySelector('.news-article');
+  if (first) cardObs.observe(first);
+});
+
+// ── Timeline Nav ───────────────────────────────────────────
+const tlItems = document.querySelectorAll('.timeline-nav__item');
+const sectionIds = ['era-1910','era-1930','era-1945','era-1960','era-1970'];
+const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+const sectionObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const year = e.target.dataset.era || (e.target.id === 'era-1970' ? '1970' : null);
+      if (year) tlItems.forEach(it => it.classList.toggle('active', it.dataset.year === year));
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+sectionEls.forEach(el => sectionObs.observe(el));
+
+document.querySelectorAll('.timeline-nav__link').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.getElementById(a.getAttribute('href').substring(1));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ── Hero Parallax ──────────────────────────────────────────
+const heroPhoto = document.getElementById('heroPhoto');
+if (heroPhoto) {
+  window.addEventListener('scroll', () => {
+    heroPhoto.style.transform = `translateY(${window.scrollY * 0.28}px)`;
+  }, { passive: true });
+}
+
+// ── Stamp Tilt ─────────────────────────────────────────────
+document.querySelectorAll('.stamp').forEach(s => {
+  const deg = (12 + Math.random() * 8) * (Math.random() > 0.5 ? 1 : -1);
+  s.style.transform = `rotate(${deg}deg)`;
+});
+
+// ── Typewriter cursor on subtitle ─────────────────────────
+(function() {
+  const el = document.getElementById('mastheadSubtitle');
+  if (!el) return;
+  const txt = el.textContent;
+  el.textContent = '';
+  el.style.cssText = 'border-right:2px solid #4A3F35;padding-right:2px;';
+  const style = document.createElement('style');
+  style.textContent = '@keyframes cb{0%,100%{border-color:transparent;}50%{border-color:#4A3F35;}}';
+  document.head.appendChild(style);
+  el.style.animation = 'cb 0.9s step-end infinite';
+  let i = 0;
+  function type() {
+    if (i < txt.length) { el.textContent += txt[i++]; setTimeout(type, 50 + Math.random()*40); }
+    else { setTimeout(() => { el.style.borderRight='none'; el.style.animation='none'; }, 1800); }
+  }
+  setTimeout(type, 800);
+})();
+
+// ── Card crinkle hover ─────────────────────────────────────
+document.querySelectorAll('.news-article').forEach(c => {
+  c.addEventListener('mouseenter', () => {
+    c.style.backgroundImage = `radial-gradient(ellipse at ${30+Math.random()*40}% ${20+Math.random()*60}%, rgba(255,255,240,0.16) 0%, transparent 70%)`;
+  });
+  c.addEventListener('mouseleave', () => { c.style.backgroundImage = ''; });
+});
+</script>
+</body>
+</html>
